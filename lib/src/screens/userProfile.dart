@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserProfile extends StatefulWidget {
+
+  const UserProfile();
+
   @override
   _UserProfileState createState() => _UserProfileState();
 }

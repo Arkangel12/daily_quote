@@ -27,16 +27,16 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void afterFirstLayout(BuildContext context) {
-    SharedPreferences.getInstance().then((prefs) {
-      bool registered = prefs.getBool('registered') ?? false;
-      String token = prefs.getString('token');
+    Future.delayed(Duration(seconds: 1), (){
+      SharedPreferences.getInstance().then((prefs) {
+        bool registered = prefs.getBool('registered') ?? false;
+        String token = prefs.getString('token');
 
-      print('registered $registered');
-
-      if (registered && token != null)
-        Navigator.of(context).push(QuoteScreen.route());
-      else
-        Navigator.of(context).push(RootScreen.route());
+        if (registered && token != null)
+          Navigator.of(context).push(QuoteScreen.route());
+        else
+          Navigator.of(context).push(RootScreen.route());
+      });
     });
   }
 }

@@ -3,6 +3,7 @@ import 'package:daily_quote/src/components/AppStyles.dart';
 import 'package:daily_quote/src/components/appColors.dart';
 import 'package:daily_quote/src/components/sharedPrefs.dart';
 import 'package:daily_quote/src/screens/loginScreen.dart';
+import 'package:daily_quote/src/screens/userProfile.dart';
 import 'package:daily_quote/src/states/quoteProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class QuoteScreen extends StatefulWidget {
 }
 
 class _QuoteScreenState extends State<QuoteScreen> {
+  GlobalKey<ScaffoldState> _keyScaffold = GlobalKey();
   @override
   void initState() {
     print('no hara llamada esta comentada');
@@ -33,35 +35,44 @@ class _QuoteScreenState extends State<QuoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _keyScaffold,
+      drawer: const UserProfile(),
+      backgroundColor: AppColors.white,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        leading: IconButton(
+          splashColor: AppColors.pinkLightest,
+          onPressed: () => _keyScaffold.currentState.openDrawer(),
+          icon: Icon(Icons.menu, color: AppColors.raspberry,),
+        ),
+        title: Text(
+          'A Quote For You',
+          style: AppStyles.h1HeadingBlack.apply(color: AppColors.raspberry),
+          textAlign: TextAlign.center,
+        ),
+      ),
       body: SafeArea(
         child: Stack(
           overflow: Overflow.visible,
           children: <Widget>[
             Positioned(
-              top: MediaQuery.of(context).size.width/1.5,
-              right: MediaQuery.of(context).size.width /3,
+              top: MediaQuery.of(context).size.width / 1.5,
+              right: MediaQuery.of(context).size.width / 3,
               child: Container(
                 width: MediaQuery.of(context).size.height,
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
-                    color: AppColors.pinkLightest,
-                    shape: BoxShape.circle
-                ),
+                    color: AppColors.pinkLightest, shape: BoxShape.circle),
               ),
             ),
             Consumer<QuoteProvider>(
               builder: (_, snapshot, __) {
-                print(snapshot.quote);
                 if (snapshot.quote != null)
                   return ListView(
                     shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(vertical: 30),
                     children: <Widget>[
-                      Text(
-                        'A Quote For You',
-                        style: AppStyles.h1HeadingBlack
-                            .apply(color: AppColors.raspberry),
-                        textAlign: TextAlign.center,
-                      ),
                       Container(
                         height: 300,
                         margin: EdgeInsets.only(
@@ -79,8 +90,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                                   child: Opacity(
                                     opacity: .7,
                                     child: CachedNetworkImage(
-                                      imageUrl:
-                                          snapshot.quote.contents.quotes.first.background,
+                                      imageUrl: snapshot.quote.contents.quotes
+                                          .first.background,
                                       fit: BoxFit.cover,
                                       colorBlendMode: BlendMode.color,
                                     ),
@@ -113,7 +124,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                               alignment: Alignment.topRight,
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.only(right: 24.0, top: 24),
+                                    const EdgeInsets.only(left: 24,right: 24.0, top: 24),
                                 child: Text(
                                   snapshot.quote.contents.quotes.first.quote,
                                   textAlign: TextAlign.right,
@@ -130,7 +141,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         ),
                         child: Text(
                           snapshot.quote.contents.quotes.first.author,
-                          style: AppStyles.h4Heading.apply(color: AppColors.black),
+                          style:
+                              AppStyles.h4Heading.apply(color: AppColors.black),
                           textAlign: TextAlign.right,
                           overflow: TextOverflow.ellipsis,
                         ),
