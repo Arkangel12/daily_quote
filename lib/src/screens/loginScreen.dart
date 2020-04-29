@@ -89,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    final  height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: Container(
               padding: const EdgeInsets.all(20),
               child: Container(
-                height: MediaQuery.of(context).size.height,
+                height: height,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

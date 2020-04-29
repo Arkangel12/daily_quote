@@ -3,6 +3,7 @@ import 'package:daily_quote/src/components/AppStyles.dart';
 import 'package:daily_quote/src/components/appColors.dart';
 import 'package:daily_quote/src/components/sharedPrefs.dart';
 import 'package:daily_quote/src/screens/loginScreen.dart';
+import 'package:daily_quote/src/screens/rootScreen.dart';
 import 'package:daily_quote/src/screens/userProfile.dart';
 import 'package:daily_quote/src/states/quoteProvider.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
   GlobalKey<ScaffoldState> _keyScaffold = GlobalKey();
   @override
   void initState() {
-    print('no hara llamada esta comentada');
-//    Provider.of<QuoteProvider>(context, listen: false).getDailyQuote();
+//    print('no hara llamada esta comentada');
+    Provider.of<QuoteProvider>(context, listen: false).getDailyQuote();
     super.initState();
   }
 
@@ -165,7 +166,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
         backgroundColor: AppColors.raspberry,
         onPressed: () {
           SharedPrefs().remove('token');
-          Navigator.of(context).push(LoginScreen.route());
+          Navigator.of(context).push(RootScreen.route());
         },
         child: Icon(
           Icons.exit_to_app,

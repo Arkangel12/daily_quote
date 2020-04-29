@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Future.delayed(Duration(seconds: 1), (){
+    Future.delayed(Duration(seconds: 1), (){ //Mock call delay
       SharedPreferences.getInstance().then((prefs) {
         bool registered = prefs.getBool('registered') ?? false;
         String token = prefs.getString('token');
