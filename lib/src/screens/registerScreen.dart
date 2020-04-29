@@ -136,7 +136,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             children: <Widget>[
                               Expanded(
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    getFromImageFrom(ImageSource.camera);
+                                  },
                                   icon: Icon(
                                     Icons.camera_front,
                                     color: AppColors.pinkLight,
