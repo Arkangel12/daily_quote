@@ -166,6 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: TextFormField(
                         key: Key('name'),
                         validator: Validators.validateName,
+                        textCapitalization: TextCapitalization.sentences,
                         onSaved: (String value) => _nameController.text = value,
                         controller: _nameController,
                         focusNode: _nodeName,
@@ -191,6 +192,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: TextFormField(
                         key: Key('lastname'),
                         validator: Validators.validateLastName,
+                        textCapitalization: TextCapitalization.sentences,
                         onSaved: (String value) => _lastNameController.text = value,
                         controller: _lastNameController,
                         focusNode: _nodeLastName,

@@ -63,3 +63,14 @@
             repositories> repositorios de quote y user.
             screens> pantallas iniciales (estas pueden contener 0-n widgets de la carpeta components) 
             states> clases para la gestion de estado.
+
+
+## Ejecución de código
+
+Moverse al path donde se encuentra el app que esta clonada y ejecutar:
+    
+ `flutter create .`
+ 
+ Esta siempre es una buena practica cuando se ejecuta un código que es clonado, no afectara el código dart pero realizara los ajustes necesario en iOS y Android. 
+ 
+ Este código está configurado para ejecutarse en ambas plataformas, tiene todos los permisos correspondientes.

@@ -1,3 +1,4 @@
+import 'package:daily_quote/src/repositories/quoteRepository.dart';
 import 'package:daily_quote/src/screens/loginScreen.dart';
 import 'package:daily_quote/src/screens/quoteScreen.dart';
 import 'package:daily_quote/src/screens/registerScreen.dart';
@@ -6,11 +7,15 @@ import 'package:daily_quote/src/states/quoteProvider.dart';
 import 'package:daily_quote/src/states/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+class QuoteMock extends Mock implements QuoteProvider {}
 
+class FakeQuote with Mock implements QuoteRepository {}
+
+void main() async {
   testWidgets('Should have an image on screen', (tester) async {
     await tester.pumpWidget(_TestWidget());
     await tester.pump(Duration.zero);
@@ -28,10 +33,8 @@ void main() async {
     expect(find.byType(TextFormField), findsNWidgets(6));
   });
 
-
   testWidgets('Should fail on tap button because fields will be empty',
       (tester) async {
-
     await tester.pumpWidget(_TestWidget(
       child: RegisterScreen(),
     ));
@@ -40,7 +43,6 @@ void main() async {
     await tester.tap(find.byKey(Key('create')));
 
     expect(find.byKey(Key('create')), findsOneWidget);
-
   });
 
   Skip('needs image from shared preferences');
@@ -137,6 +139,10 @@ void main() async {
   });
 
   testWidgets('Verify widgets in QuoteScreen', (tester) async {
+    QuoteMock quoteMock = QuoteMock();
+
+    when(quoteMock.getDailyQuote()).thenAnswer((_) async => Future.value('cosa'));
+
     await tester.pumpWidget(_TestWidget(
       child: QuoteScreen(),
     ));
