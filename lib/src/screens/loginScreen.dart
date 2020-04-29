@@ -3,13 +3,10 @@ import 'dart:io';
 import 'package:after_layout/after_layout.dart';
 import 'package:daily_quote/src/components/AppStyles.dart';
 import 'package:daily_quote/src/components/appColors.dart';
-import 'package:daily_quote/src/components/sharedPrefs.dart';
+import 'package:daily_quote/src/components/biometrics.dart';
 import 'package:daily_quote/src/components/validators.dart';
 import 'package:daily_quote/src/models/user.dart';
-import 'package:daily_quote/src/repositories/userRepository.dart';
 import 'package:daily_quote/src/screens/quoteScreen.dart';
-import 'package:daily_quote/src/screens/userProfile.dart';
-import 'package:daily_quote/src/states/quoteProvider.dart';
 import 'package:daily_quote/src/states/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -41,72 +38,31 @@ class _LoginScreenState extends State<LoginScreen>
   final FocusNode _nodeEmail = FocusNode();
   final FocusNode _nodePassword = FocusNode();
 
+  bool loginError = false;
   final LocalAuthentication auth = LocalAuthentication();
   bool _canCheckBiometrics = false;
   List<BiometricType> _availableBiometrics;
-  String _authorized = 'Not Authorized';
-  bool _isAuthenticating = false;
 
-  Future<void> _checkBiometrics() async {
-    bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    if (!mounted) return;
-
-    setState(() {
-      print('_checkBiometrics $canCheckBiometrics');
-      _canCheckBiometrics = canCheckBiometrics;
-    });
-  }
-
-  Future<void> _getAvailableBiometrics() async {
-    List<BiometricType> availableBiometrics;
-    try {
-      availableBiometrics = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    if (!mounted) return;
-
-    setState(() {
-//      print(availableBiometrics);
-      _availableBiometrics = availableBiometrics;
-    });
-  }
-
-  Future<void> _authenticate() async {
+  _authenticate() async {
     bool authenticated = false;
-    try {
-      setState(() {
-        _isAuthenticating = true;
-        _authorized = 'Authenticating';
-      });
-      authenticated = await auth.authenticateWithBiometrics(
-          localizedReason: 'Scaning Biometrics to authenticate',
-          useErrorDialogs: true,
-          stickyAuth: true);
-      setState(() {
-        _isAuthenticating = false;
-        _authorized = 'Authenticating';
-      });
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    if (!mounted) return;
 
-    final String message = authenticated ? 'Authorized' : 'Not Authorized';
-    print(message);
-    setState(() {
-      _authorized = message;
-    });
+    authenticated = await Biometrics().authenticate();
 
     if (authenticated) {
       Provider.of<UserProvider>(context, listen: false).userAuthenticate();
       Navigator.of(context).push(QuoteScreen.route());
     }
+  }
+
+  _isBiometricAllow() async {
+    _canCheckBiometrics = await Biometrics().checkBiometrics();
+    _availableBiometrics = await Biometrics().getAvailableBiometrics();
+    setState(() {});
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    _isBiometricAllow();
   }
 
   @override
@@ -157,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen>
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: TextFormField(
+                        key: Key('emailLogin'),
                         keyboardType: TextInputType.emailAddress,
                         validator: Validators.validateEmail,
                         onSaved: (String value) =>
@@ -183,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen>
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: TextFormField(
+                        key: Key('passwordLogin'),
                         validator: Validators.validatePassword,
                         onSaved: (String value) =>
                             _passwordController.text = value,
@@ -209,8 +167,10 @@ class _LoginScreenState extends State<LoginScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        if (_canCheckBiometrics && _availableBiometrics.length > 0)
-                          if (Platform.isIOS && _availableBiometrics.contains(BiometricType.face))
+                        if (_canCheckBiometrics &&
+                            _availableBiometrics.length > 0)
+                          if (Platform.isIOS &&
+                              _availableBiometrics.contains(BiometricType.face))
                             IconButton(
                               onPressed: () {
                                 _authenticate();
@@ -227,6 +187,7 @@ class _LoginScreenState extends State<LoginScreen>
                               iconSize: 34,
                             ),
                         FlatButton(
+                          key: Key('login'),
                           splashColor: AppColors.pinkLightest,
                           onPressed: () {
                             if (validateAndSave()) {
@@ -234,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen>
                                       listen: false)
                                   .user;
 
-                              print(user.toJson().toString());
+//                              print(user.toJson().toString());
 
                               if (user.email == _emailController.text &&
                                   user.password == _passwordController.text) {
@@ -245,6 +206,10 @@ class _LoginScreenState extends State<LoginScreen>
                                     .userAuthenticate();
                                 Navigator.of(context).push(QuoteScreen.route());
                               }
+                            } else {
+                              setState(() {
+                                loginError = true;
+                              });
                             }
                           },
                           child: Text(
@@ -255,6 +220,16 @@ class _LoginScreenState extends State<LoginScreen>
                         ),
                       ],
                     ),
+                    if (loginError)
+                      Opacity(
+                        opacity: loginError ? 0.9 : 0.0,
+                        child: Text(
+                          'Error with email or password',
+                          style: AppStyles.smallBodySemiBold
+                              .apply(color: AppColors.raspberry),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     Spacer(),
                     Container(
                       height: 100,
@@ -282,11 +257,5 @@ class _LoginScreenState extends State<LoginScreen>
       return true;
     }
     return false;
-  }
-
-  @override
-  void afterFirstLayout(BuildContext context) {
-    _checkBiometrics();
-    _getAvailableBiometrics();
   }
 }
