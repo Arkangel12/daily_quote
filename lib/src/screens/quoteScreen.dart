@@ -161,6 +161,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        key: Key('FAB'),
         backgroundColor: AppColors.raspberry,
         onPressed: () {
           SharedPrefs().remove('token');

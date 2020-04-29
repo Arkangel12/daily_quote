@@ -55,8 +55,8 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   _isBiometricAllow() async {
-    _canCheckBiometrics = await Biometrics().checkBiometrics();
-    _availableBiometrics = await Biometrics().getAvailableBiometrics();
+    _canCheckBiometrics = await Biometrics().checkBiometrics() ?? false;
+    _availableBiometrics = await Biometrics().getAvailableBiometrics() ?? [];
     setState(() {});
   }
 
@@ -167,8 +167,7 @@ class _LoginScreenState extends State<LoginScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        if (_canCheckBiometrics &&
-                            _availableBiometrics.length > 0)
+                        if (_canCheckBiometrics && _availableBiometrics.length > 0)
                           if (Platform.isIOS &&
                               _availableBiometrics.contains(BiometricType.face))
                             IconButton(

@@ -63,5 +63,3 @@
             repositories> repositorios de quote y user.
             screens> pantallas iniciales (estas pueden contener 0-n widgets de la carpeta components) 
             states> clases para la gestion de estado.
-
-###

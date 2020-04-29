@@ -13,4 +13,8 @@ class UserRepository {
     await SharedPrefs().saveUser('user', user);
     await SharedPrefs().saveBool('registered', true);
   }
+
+  Future<String> userImage() async {
+    return SharedPrefs().readString('avatar');
+  }
 }

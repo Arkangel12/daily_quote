@@ -335,11 +335,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             );
 
                             Provider.of<UserProvider>(context, listen: false).saveUser(user);
-//                        Navigator.of(context).pop(LoginScreen.route());
-//                        UserRepository().saveUser(user: user).then((_) {
-//                          Navigator.of(context).pop(LoginScreen.route());
-////                          Provider.of<UserProvider>(context, listen: false).setRegistered(true);
-//                        });
                           }
                         } else {
                           setState(() => showEmptyImageError = true);

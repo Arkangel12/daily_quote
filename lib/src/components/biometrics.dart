@@ -16,7 +16,7 @@ class Biometrics {
   }
 
   Future<List<BiometricType>> getAvailableBiometrics() async {
-    List<BiometricType> availableBiometrics;
+    List<BiometricType> availableBiometrics = [];
 
     try {
       availableBiometrics = await auth.getAvailableBiometrics();

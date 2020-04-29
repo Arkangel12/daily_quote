@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 class UserProvider with ChangeNotifier {
   User _user;
   bool _registered= false;
+  String _userImage;
   String _token;
 
   User get user => _user;
   bool get registered => _registered;
+  String get userImage => _userImage;
   String get token => _token;
 
   void getCurrentUser() async {
@@ -29,9 +31,13 @@ class UserProvider with ChangeNotifier {
   }
 
   void saveUser(User user) async {
-    print('entre saveUser Provider');
     await UserRepository().saveUser(user: user);
     _registered = true;
+    notifyListeners();
+  }
+
+  void setImage() async {
+    _userImage = await UserRepository().userImage();
     notifyListeners();
   }
 
