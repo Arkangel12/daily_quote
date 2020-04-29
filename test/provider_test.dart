@@ -18,15 +18,14 @@ import 'package:provider/provider.dart';
 void main() async {
 //  UserProvider _userProvider;
 //  StreamController<UserProvider> _controller;
-  User _userModel = User(
-    name: 'Argel',
-    lastName: 'Bejarano',
-    email: 'argel.bc18@gmail.com',
-    password: '123456',
-    phoneNumber: '6622791358',
-    address: 'address',
-  );
-
+//  User _userModel = User(
+//    name: 'Argel',
+//    lastName: 'Bejarano',
+//    email: 'argel.bc18@gmail.com',
+//    password: '123456',
+//    phoneNumber: '6622791358',
+//    address: 'address',
+//  );
 //  setUp(() {
 //    _controller = StreamController<UserProvider>();
 //    _userProvider = UserProvider();
