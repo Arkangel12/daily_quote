@@ -1,0 +1,32 @@
+{
+  "success": {
+    "total": 1
+  },
+  "contents": {
+    "quotes": [
+      {
+        "quote": "Extend beyond your preconceived limits!",
+        "length": "39",
+        "author": "Lorii Myers",
+        "tags": [
+          "confidence",
+          "inspire",
+          "limit",
+          "self-improvement"
+        ],
+        "category": "inspire",
+        "language": "en",
+        "date": "2020-04-28",
+        "permalink": "https://theysaidso.com/quote/lorii-myers-extend-beyond-your-preconceived-limits",
+        "id": "JRlytEdrKdV8iSCZCSEh6weF",
+        "background": "https://theysaidso.com/img/qod/qod-inspire.jpg",
+        "title": "Inspiring Quote of the day"
+      }
+    ]
+  },
+  "baseurl": "https://theysaidso.com",
+  "copyright": {
+    "year": 2022,
+    "url": "https://theysaidso.com"
+  }
+}
