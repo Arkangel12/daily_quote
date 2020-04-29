@@ -234,7 +234,7 @@ packages:
     source: hosted
     version: "3.2.1"
   local_auth:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: local_auth
       url: "https://pub.dartlang.org"

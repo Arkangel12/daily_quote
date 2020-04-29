@@ -47,5 +47,7 @@
     <string>Can I use the camera please? Only for demo purpose of the app</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Only for demo purpose of the app</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Why is my app authenticating using face id?</string>
 </dict>
 </plist>

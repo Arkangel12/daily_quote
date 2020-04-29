@@ -14,7 +14,7 @@ description: Daily quote from https://quotes.rest/
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,12 +32,12 @@ dependencies:
   provider: ^4.0.0
   http: any
   mockito: any
-  local_auth: ^0.6.2+1
 
 dev_dependencies:
   test: any
   flutter_test:
     sdk: flutter
+  local_auth: ^0.6.2+1
 
 
 # For information on the generic Dart part of this file, see the

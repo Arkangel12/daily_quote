@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier {
   User _user;
-  bool _registered;
+  bool _registered= false;
   String _token;
 
   User get user => _user;

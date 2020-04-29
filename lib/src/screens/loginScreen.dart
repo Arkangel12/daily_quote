@@ -1,4 +1,6 @@
+import 'dart:io';
 
+import 'package:after_layout/after_layout.dart';
 import 'package:daily_quote/src/components/AppStyles.dart';
 import 'package:daily_quote/src/components/appColors.dart';
 import 'package:daily_quote/src/components/sharedPrefs.dart';
@@ -12,9 +14,11 @@ import 'package:daily_quote/src/states/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter/services.dart';
 
 class LoginScreen extends StatefulWidget {
-  static Route<dynamic> route(){
+  static Route<dynamic> route() {
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (_, animation, __) => FadeTransition(
@@ -23,17 +27,87 @@ class LoginScreen extends StatefulWidget {
       ),
     );
   }
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with AfterLayoutMixin<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   final FocusNode _nodeEmail = FocusNode();
   final FocusNode _nodePassword = FocusNode();
+
+  final LocalAuthentication auth = LocalAuthentication();
+  bool _canCheckBiometrics = false;
+  List<BiometricType> _availableBiometrics;
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
+
+  Future<void> _checkBiometrics() async {
+    bool canCheckBiometrics;
+    try {
+      canCheckBiometrics = await auth.canCheckBiometrics;
+    } on PlatformException catch (e) {
+      print(e);
+    }
+    if (!mounted) return;
+
+    setState(() {
+      print('_checkBiometrics $canCheckBiometrics');
+      _canCheckBiometrics = canCheckBiometrics;
+    });
+  }
+
+  Future<void> _getAvailableBiometrics() async {
+    List<BiometricType> availableBiometrics;
+    try {
+      availableBiometrics = await auth.getAvailableBiometrics();
+    } on PlatformException catch (e) {
+      print(e);
+    }
+    if (!mounted) return;
+
+    setState(() {
+//      print(availableBiometrics);
+      _availableBiometrics = availableBiometrics;
+    });
+  }
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticateWithBiometrics(
+          localizedReason: 'Scaning Biometrics to authenticate',
+          useErrorDialogs: true,
+          stickyAuth: true);
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = 'Authenticating';
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
+    if (!mounted) return;
+
+    final String message = authenticated ? 'Authorized' : 'Not Authorized';
+    print(message);
+    setState(() {
+      _authorized = message;
+    });
+
+    if (authenticated) {
+      Provider.of<UserProvider>(context, listen: false).userAuthenticate();
+      Navigator.of(context).push(QuoteScreen.route());
+    }
+  }
 
   @override
   void initState() {
@@ -133,27 +207,50 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
+                        if (_canCheckBiometrics && _availableBiometrics.length > 0)
+                          if (Platform.isIOS && _availableBiometrics.contains(BiometricType.face))
+                            IconButton(
+                              onPressed: () {
+                                _authenticate();
+                              },
+                              icon: Icon(Icons.face),
+                              iconSize: 34,
+                            )
+                          else
+                            IconButton(
+                              onPressed: () {
+                                _authenticate();
+                              },
+                              icon: Icon(Icons.fingerprint),
+                              iconSize: 34,
+                            ),
                         FlatButton(
                           splashColor: AppColors.pinkLightest,
                           onPressed: () {
-                              if (validateAndSave()) {
-                                User user = Provider.of<UserProvider>(context, listen: false).user;
+                            if (validateAndSave()) {
+                              User user = Provider.of<UserProvider>(context,
+                                      listen: false)
+                                  .user;
 
-                                print(user.toJson().toString());
+                              print(user.toJson().toString());
 
-                                if(user.email == _emailController.text  && user.password == _passwordController.text){
-                                  _emailController.text = '';
-                                  _passwordController.text = '';
-                                  Provider.of<UserProvider>(context, listen: false).userAuthenticate();
-                                  Navigator.of(context).push(QuoteScreen.route());
-                                }
+                              if (user.email == _emailController.text &&
+                                  user.password == _passwordController.text) {
+                                _emailController.text = '';
+                                _passwordController.text = '';
+                                Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .userAuthenticate();
+                                Navigator.of(context).push(QuoteScreen.route());
                               }
+                            }
                           },
                           child: Text(
                             'Login',
-                            style: AppStyles.h3HeadingNormal.apply(fontWeightDelta: 3),
+                            style: AppStyles.h3HeadingNormal
+                                .apply(fontWeightDelta: 3),
                           ),
                         ),
                       ],
@@ -185,5 +282,11 @@ class _LoginScreenState extends State<LoginScreen> {
       return true;
     }
     return false;
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    _checkBiometrics();
+    _getAvailableBiometrics();
   }
 }
