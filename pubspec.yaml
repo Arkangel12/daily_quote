@@ -33,6 +33,7 @@ dependencies:
   http: any
   mockito: any
   flutter_launcher_icons: ^0.7.5
+  get_it: ^4.0.2
 
 dev_dependencies:
   test: any

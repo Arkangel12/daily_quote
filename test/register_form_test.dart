@@ -1,14 +1,27 @@
 import 'dart:convert';
 
+import 'package:daily_quote/locator.dart';
 import 'package:daily_quote/src/components/validators.dart';
 import 'package:daily_quote/src/models/quote.dart';
 import 'package:daily_quote/src/models/user.dart';
+import 'package:daily_quote/src/repositories/quoteRepository.dart';
+import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
+
+class FakeQuote with Mock implements QuoteBase {}
+
 
 void main() async {
   User _userModel;
   Quote _quoteModel;
+  QuoteRepository _repository;
+
+  setUpAll((){
+    setupLocator();
+    locator.allowReassignment = true;
+    _repository = QuoteRepository();
+  });
 
   group('[User] Object', () {
     test('[User] Check individual values', () {
@@ -208,5 +221,39 @@ void main() async {
       expect(quoteFromJson(jsonString).contents.quotes[0].quote, 'Extend beyond your preconceived limits!');
       expect(quoteFromJson(jsonString).baseurl, 'https://theysaidso.com');
     });
+
+    test('Retrieve Quote of the Day', () async {
+      _quoteModel = Quote(
+        success: Success(total: 1),
+        baseurl: 'https://theysaidso.com',
+        copyright: Copyright(year: 2020, url: 'otherUrl'),
+        contents: Contents(quotes: [
+          QuoteElement(
+            quote: 'My quote',
+            length: "8",
+            author: 'Argel Bejarano',
+            tags: ['BJJ', 'Calistenia', 'Basquet Ball'],
+            category: 'human',
+            language: 'en',
+            date: DateTime.now(),
+            permalink: 'link',
+            id: 'id',
+            background: 'imageurl',
+            title: 'url',
+          )
+        ]),
+      );
+
+      var fakeQuote = FakeQuote();
+      locator.registerSingleton<QuoteBase>(fakeQuote);
+
+      when(fakeQuote.getDailyQuote()).thenAnswer((_) => Future.value(_quoteModel));
+
+      final result  = await _repository.getDailyQuote();
+
+      expect(result.baseurl, _quoteModel.baseurl);
+
+    });
+
   });
 }

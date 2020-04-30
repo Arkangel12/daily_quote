@@ -1,6 +1,7 @@
+import 'package:daily_quote/locator.dart';
+import 'package:daily_quote/src/models/quote.dart';
 import 'package:daily_quote/src/repositories/quoteRepository.dart';
 import 'package:daily_quote/src/screens/loginScreen.dart';
-import 'package:daily_quote/src/screens/quoteScreen.dart';
 import 'package:daily_quote/src/screens/registerScreen.dart';
 import 'package:daily_quote/src/screens/splashScreen.dart';
 import 'package:daily_quote/src/states/quoteProvider.dart';
@@ -11,11 +12,14 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class QuoteMock extends Mock implements QuoteProvider {}
-
-class FakeQuote with Mock implements QuoteRepository {}
+class FakeQuote with Mock implements QuoteBase {}
 
 void main() async {
+  setUpAll(() {
+    setupLocator();
+    locator.allowReassignment = true;
+  });
+
   testWidgets('Should have an image on screen', (tester) async {
     await tester.pumpWidget(_TestWidget());
     await tester.pump(Duration.zero);
@@ -51,9 +55,6 @@ void main() async {
       child: RegisterScreen(),
     ));
     await tester.pump(Duration.zero);
-
-//    SharedPreferences.setMockInitialValues(
-//        <String, dynamic>{'avata': 'fakeAvatar as Uint8List'});
 
     Finder nameFinder = find.byKey(Key('name'));
     await tester.enterText(nameFinder, 'Argel');
@@ -97,20 +98,8 @@ void main() async {
   });
 
   testWidgets(
-      'Should fail login for empty TextFormField and label with information should appear',
+      'Should fail login for wrong email or password in TextFormField and label with information should appear',
       (tester) async {
-    await tester.pumpWidget(_TestWidget(
-      child: LoginScreen(),
-    ));
-    await tester.pump(Duration.zero);
-
-    await tester.tap(find.byKey(Key('login')));
-    await tester.pump();
-
-    expect(find.text('Error with email or password'), findsNWidgets(1));
-  });
-
-  testWidgets('Do login and move to screen QuoteScreen', (tester) async {
     SharedPreferences.setMockInitialValues(<String, dynamic>{
       'user':
           '{"name": "Argel", "last_name": "Bejarano", "email": "argel.bc18@gmail.com", "password": "123456", "phone_number": "6622791358", "address": "Vavaturu 24, Benei Residencial"}'
@@ -121,56 +110,15 @@ void main() async {
     await tester.pump(Duration.zero);
 
     Finder emailFinder = find.byKey(Key('emailLogin'));
-    await tester.enterText(emailFinder, 'argel.bc18@gmail.com');
+    await tester.enterText(emailFinder, 'argel.bc18@.com');
 
     Finder passwordFinder = find.byKey(Key('passwordLogin'));
-    await tester.enterText(passwordFinder, '123456');
+    await tester.enterText(passwordFinder, '1236');
 
     await tester.tap(find.byKey(Key('login')));
     await tester.pump();
 
-    await tester.pumpWidget(_TestWidget(
-      child: QuoteScreen(),
-    ));
-
-    await tester.pump(Duration.zero);
-
-    expect(find.byKey(Key('login')), findsNothing);
-  });
-
-  testWidgets('Verify widgets in QuoteScreen', (tester) async {
-    QuoteMock quoteMock = QuoteMock();
-
-    when(quoteMock.getDailyQuote()).thenAnswer((_) async => Future.value('cosa'));
-
-    await tester.pumpWidget(_TestWidget(
-      child: QuoteScreen(),
-    ));
-    await tester.pump(Duration.zero);
-
-    expect(find.byType(IconButton), findsOneWidget);
-    expect(find.byType(FloatingActionButton), findsOneWidget);
-  });
-
-  testWidgets('Signout QuoteScreen', (tester) async {
-    SharedPreferences.setMockInitialValues(
-        <String, dynamic>{'token': 'fakeToken'});
-
-    final prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString('token');
-
-    expect(token, 'fakeToken');
-
-    await tester.pumpWidget(_TestWidget(
-      child: QuoteScreen(),
-    ));
-
-    await tester.pump(Duration.zero);
-
-    await tester.tap(find.byKey(Key('FAB')));
-
-    token = prefs.getString('token');
-    expect(token, null);
+    expect(find.text('Error with email or password'), findsNWidgets(1));
   });
 }
 

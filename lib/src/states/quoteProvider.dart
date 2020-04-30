@@ -8,7 +8,7 @@ class QuoteProvider with ChangeNotifier {
   Quote get quote => _quote;
 
   void getDailyQuote() async {
-   _quote = await QuoteRepository.getDailyQuote();
+   _quote = await QuoteRepository().getDailyQuote();
    notifyListeners();
   }
 }

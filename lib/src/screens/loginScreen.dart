@@ -195,8 +195,6 @@ class _LoginScreenState extends State<LoginScreen>
                                       listen: false)
                                   .user;
 
-//                              print(user.toJson().toString());
-
                               if (user.email == _emailController.text &&
                                   user.password == _passwordController.text) {
                                 _emailController.text = '';
@@ -205,11 +203,7 @@ class _LoginScreenState extends State<LoginScreen>
                                         listen: false)
                                     .userAuthenticate();
                                 Navigator.of(context).push(QuoteScreen.route());
-                              }
-                            } else {
-                              setState(() {
-                                loginError = true;
-                              });
+                              } else setState(() => loginError = true);
                             }
                           },
                           child: Text(
