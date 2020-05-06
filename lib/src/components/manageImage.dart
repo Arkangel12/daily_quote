@@ -9,7 +9,7 @@ class ManageImage {
 
   static Future<String> getImageFromPreferences() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(KEY) ?? null;
+    return prefs.getString(KEY);
   }
 
   static Future<bool> saveImageToPreferences(String value) async {

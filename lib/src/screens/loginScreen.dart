@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen>
 
     if (authenticated) {
       Provider.of<UserProvider>(context, listen: false).userAuthenticate();
-      Navigator.of(context).push(QuoteScreen.route());
+      await Navigator.of(context).push(QuoteScreen.route());
     }
   }
 
@@ -168,13 +168,13 @@ class _LoginScreenState extends State<LoginScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        if (_canCheckBiometrics && _availableBiometrics.length > 0)
+                        if (_canCheckBiometrics && _availableBiometrics.isNotEmpty)
                           if (Platform.isIOS &&
                               _availableBiometrics.contains(BiometricType.face))
                             IconButton(
-//                              onPressed: () {
-//                                _authenticate();
-//                              },
+                              onPressed: () {
+                                _authenticate();
+                              },
                               icon: Icon(Icons.face),
                               iconSize: 34,
                             )
@@ -203,7 +203,9 @@ class _LoginScreenState extends State<LoginScreen>
                                         listen: false)
                                     .userAuthenticate();
                                 Navigator.of(context).push(QuoteScreen.route());
-                              } else setState(() => loginError = true);
+                              } else {
+                                setState(() => loginError = true);
+                              }
                             }
                           },
                           child: Text(

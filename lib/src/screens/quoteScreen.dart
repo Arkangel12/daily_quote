@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:daily_quote/src/components/AppStyles.dart';
 import 'package:daily_quote/src/components/appColors.dart';
 import 'package:daily_quote/src/components/sharedPrefs.dart';
-import 'package:daily_quote/src/screens/loginScreen.dart';
 import 'package:daily_quote/src/screens/rootScreen.dart';
 import 'package:daily_quote/src/screens/userProfile.dart';
 import 'package:daily_quote/src/states/quoteProvider.dart';
@@ -26,6 +25,7 @@ class QuoteScreen extends StatefulWidget {
 
 class _QuoteScreenState extends State<QuoteScreen> {
   GlobalKey<ScaffoldState> _keyScaffold = GlobalKey();
+
   @override
   void initState() {
 //    print('no hara llamada esta comentada');
@@ -45,7 +45,10 @@ class _QuoteScreenState extends State<QuoteScreen> {
         leading: IconButton(
           splashColor: AppColors.pinkLightest,
           onPressed: () => _keyScaffold.currentState.openDrawer(),
-          icon: Icon(Icons.menu, color: AppColors.raspberry,),
+          icon: Icon(
+            Icons.menu,
+            color: AppColors.raspberry,
+          ),
         ),
         title: Text(
           'A Quote For You',
@@ -69,7 +72,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
             ),
             Consumer<QuoteProvider>(
               builder: (_, snapshot, __) {
-                if (snapshot.quote != null)
+                if (snapshot.quote != null) {
                   return ListView(
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(vertical: 30),
@@ -124,8 +127,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                             Align(
                               alignment: Alignment.topRight,
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 24,right: 24.0, top: 24),
+                                padding: const EdgeInsets.only(
+                                    left: 24, right: 24.0, top: 24),
                                 child: Text(
                                   snapshot.quote.contents.quotes.first.quote,
                                   textAlign: TextAlign.right,
@@ -150,6 +153,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                       ),
                     ],
                   );
+                }
 
                 return Center(
                   child: CircularProgressIndicator(

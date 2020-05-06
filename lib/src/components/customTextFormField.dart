@@ -1,6 +1,5 @@
 import 'package:daily_quote/src/components/AppStyles.dart';
 import 'package:daily_quote/src/components/appColors.dart';
-import 'package:daily_quote/src/components/validators.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {

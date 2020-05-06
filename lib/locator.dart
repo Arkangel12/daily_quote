@@ -1,6 +1,5 @@
 
 import 'package:daily_quote/src/repositories/quoteRepository.dart';
-import 'package:daily_quote/src/states/quoteProvider.dart';
 import 'package:get_it/get_it.dart';
 
 GetIt locator = GetIt.instance;

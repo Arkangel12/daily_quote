@@ -7,8 +7,6 @@ import 'package:daily_quote/src/components/manageImage.dart';
 import 'package:daily_quote/src/components/register/imageStatusWidget.dart';
 import 'package:daily_quote/src/components/validators.dart';
 import 'package:daily_quote/src/models/user.dart';
-import 'package:daily_quote/src/repositories/userRepository.dart';
-import 'package:daily_quote/src/screens/loginScreen.dart';
 import 'package:daily_quote/src/states/userProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

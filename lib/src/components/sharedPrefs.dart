@@ -10,7 +10,7 @@ class SharedPrefs {
 
   saveUser(String key, value) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, json.encode(value));
+    await prefs.setString(key, json.encode(value));
   }
 
   readString(String key) async {
@@ -20,7 +20,7 @@ class SharedPrefs {
 
   saveString(String key, value) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, value);
+    await prefs.setString(key, value);
   }
 
   readBool(String key) async {
@@ -30,11 +30,11 @@ class SharedPrefs {
 
   saveBool(String key, value) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setBool(key, value);
+    await prefs.setBool(key, value);
   }
 
   remove(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove(key);
+    await prefs.remove(key);
   }
 }

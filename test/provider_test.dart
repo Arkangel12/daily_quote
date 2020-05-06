@@ -1,5 +1,4 @@
 import 'package:daily_quote/locator.dart';
-import 'package:daily_quote/src/models/quote.dart';
 import 'package:daily_quote/src/repositories/quoteRepository.dart';
 import 'package:daily_quote/src/screens/loginScreen.dart';
 import 'package:daily_quote/src/screens/registerScreen.dart';

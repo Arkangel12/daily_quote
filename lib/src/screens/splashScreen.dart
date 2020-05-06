@@ -31,10 +31,11 @@ class _SplashScreenState extends State<SplashScreen>
       bool registered = prefs.getBool('registered') ?? false;
       String token = prefs.getString('token');
 
-      if (registered && token != null)
+      if (registered && token != null) {
         Navigator.of(context).push(QuoteScreen.route());
-      else
+      } else {
         Navigator.of(context).push(RootScreen.route());
+      }
     });
   }
 }
