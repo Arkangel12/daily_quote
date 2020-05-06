@@ -172,9 +172,9 @@ class _LoginScreenState extends State<LoginScreen>
                           if (Platform.isIOS &&
                               _availableBiometrics.contains(BiometricType.face))
                             IconButton(
-                              onPressed: () {
-                                _authenticate();
-                              },
+//                              onPressed: () {
+//                                _authenticate();
+//                              },
                               icon: Icon(Icons.face),
                               iconSize: 34,
                             )
