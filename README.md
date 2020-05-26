@@ -18,6 +18,7 @@
     flutter_test:
       sdk: flutter
     local_auth: ^0.6.2+1
+    pedantic: ^1.8.0+1
     
 ### Extra Dependencies
     flutter_icons:
