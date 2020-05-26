@@ -566,7 +566,8 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.14.3"
+    version: "1.14.4"
+    pedantic
   test_api:
     dependency: transitive
     description:
@@ -629,7 +630,11 @@ packages:
       name: webkit_inspection_protocol
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.5.2"
+=======
+    version: "0.7.2"
+>>>>>>> pedantic
   xml:
     dependency: transitive
     description:
