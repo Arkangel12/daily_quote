@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen>
   bool loginError = false;
   final LocalAuthentication auth = LocalAuthentication();
   bool _canCheckBiometrics = false;
-  List<BiometricType> _availableBiometrics;
+  List<BiometricType> _availableBiometrics = [];
 
   _authenticate() async {
     bool authenticated = false;

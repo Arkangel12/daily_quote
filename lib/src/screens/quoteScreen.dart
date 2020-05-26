@@ -184,7 +184,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   }
 
   Future<bool> _willPopCallback() async {
-    SharedPrefs().remove('token');
+    await SharedPrefs().remove('token');
     return Navigator.of(context).push(RootScreen.route());
   }
 }
