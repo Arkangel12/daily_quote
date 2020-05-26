@@ -10,7 +10,7 @@ class AppStyles {
     fontSize: 25,
   );
 
-  static final h1HeadingExtraBold = GoogleFonts.oswald(
+  static final h1HeadingExtraBold = GoogleFonts.roboto(
     fontWeight: FontWeight.w800,
     fontSize: 25,
   );
