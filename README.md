@@ -1,4 +1,4 @@
-# Daily Quote App (Fondeadora)
+# Daily Quote App
 
 ### Dependencies
 
